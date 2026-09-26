@@ -76,6 +76,9 @@ export const getAllHomeworksService = async ({
     return { homeworks, totalHomeworks };
 };
 
+export const getHomeWorkByQueryService = async (query) =>
+    await Homework.findOne(query);
+
 export const getHomeworkByIdService = async (homeworkId) =>
     await Homework.findById(homeworkId);
 

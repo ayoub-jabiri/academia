@@ -8,6 +8,7 @@ export default function ClassesPage() {
     const { user } = useSelector((state) => state.user);
 
     const isAdmin = user?.role === "admin";
+    const isParent = user?.role === "parent";
 
     return (
         <div className="min-h-screen w-full bg-slate-50 p-6">
@@ -17,7 +18,7 @@ export default function ClassesPage() {
                         All Classes ({data?.totalClasses || 0})
                     </h1>
 
-                    <TableActions isAdmin={isAdmin} />
+                    <TableActions isAdmin={isAdmin} isParent={isParent} />
                 </div>
 
                 <ClassesTable isAdmin={isAdmin} />

@@ -76,3 +76,12 @@ export const getGuardianParentService = async (guardianId) => {
 
     return await getUserByIdService(guardian.parentId);
 };
+
+export const getMyChildrenService = async (parentId) => {
+    const guardianLinks = await Guardian.find({ parentId }).populate(
+        "studentId",
+        "fullName email gender"
+    );
+
+    return guardianLinks.map((link) => link.studentId);
+};

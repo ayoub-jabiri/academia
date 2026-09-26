@@ -11,6 +11,7 @@ export const getClassesService = async ({
     search,
     level,
     mine,
+    studentId,
 }) => {
     const skip = (page - 1) * limit;
 
@@ -32,19 +33,24 @@ export const getClassesService = async ({
         filter.level = level;
     }
 
+    if (studentId && user.role === "parent") {
+        const allowedToFilterByStudent = await Guardian.findOne({
+            parentId: user.id,
+            studentId,
+        });
+
+        if (allowedToFilterByStudent) {
+            filter.students = studentId;
+        } else {
+            filter.students = null;
+        }
+    }
+
     if (mine === "true" && user.role !== "admin") {
         if (user.role === "teacher") {
             filter.teacherId = user.id;
         } else if (user.role === "student") {
             filter.students = user.id;
-        } else if (user.role === "parent") {
-            const guardianLinks = await Guardian.find({
-                parentId: user.id,
-            }).select("studentId");
-
-            filter.students = {
-                $in: guardianLinks.map((link) => link.studentId),
-            };
         }
     }
 

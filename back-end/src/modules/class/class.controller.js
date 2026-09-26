@@ -21,7 +21,8 @@ export const getClasses = async (req, res) => {
             limit = 15,
             search = "",
             level = "",
-            mine = false,
+            mine = "false",
+            studentId = "",
         } = req.query;
 
         const currentPage = +page;
@@ -34,6 +35,7 @@ export const getClasses = async (req, res) => {
             search,
             level,
             mine,
+            studentId,
         });
 
         res.json({

@@ -23,7 +23,7 @@ export default function ClassesTable({ isAdmin }) {
         data,
         loading,
         error,
-        tableActions: { search, level, page, limit, mine },
+        tableActions: { search, level, page, limit, mine, studentId },
     } = useSelector((state) => state.classes.classesList);
     const {
         message,
@@ -33,8 +33,8 @@ export default function ClassesTable({ isAdmin }) {
 
     // Handle Fetch Classes
     useEffect(() => {
-        dispatch(getClasses({ search, level, page, limit, mine }));
-    }, [dispatch, search, level, page, limit, mine]);
+        dispatch(getClasses({ search, level, page, limit, mine, studentId }));
+    }, [dispatch, search, level, page, limit, mine, studentId]);
 
     function handlePaginationActions(action) {
         const value =

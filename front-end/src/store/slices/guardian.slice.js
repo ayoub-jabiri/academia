@@ -79,6 +79,17 @@ export const updateGuardian = createAsyncThunk(
     }
 );
 
+export const getMyChildren = createAsyncThunk(
+    "guardians/getMyChildren",
+    async (_, { rejectWithValue }) => {
+        try {
+            return await api.get("/guardians/my-children");
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);
+
 const initialState = {
     registerData: {
         message: null,
@@ -104,6 +115,11 @@ const initialState = {
             page: 1,
             limit: 15,
         },
+    },
+    myChildren: {
+        data: null,
+        loading: false,
+        error: null,
     },
 };
 
@@ -218,6 +234,22 @@ const guardianSlice = createSlice({
                 state.updateData.updating = false;
                 state.updateData.message = null;
                 state.updateData.error = action.payload;
+            });
+
+        // Get My Children (parent self-service)
+        builder
+            .addCase(getMyChildren.pending, (state) => {
+                state.myChildren.loading = true;
+                state.myChildren.error = null;
+            })
+            .addCase(getMyChildren.fulfilled, (state, action) => {
+                state.myChildren.loading = false;
+                state.myChildren.data = action.payload;
+                state.myChildren.error = null;
+            })
+            .addCase(getMyChildren.rejected, (state, action) => {
+                state.myChildren.loading = false;
+                state.myChildren.error = action.payload;
             });
     },
 });

@@ -1,5 +1,6 @@
 import { clientErrorResponse } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
+import { getHomeWorkByQueryService } from "../homework/homework.service.js";
 import { getSchoolRoomByIdService } from "../school-room/room.service.js";
 import { getSubjectById } from "../subject/subject.service.js";
 import { getUserByIdService } from "../users/user.service.js";
@@ -115,6 +116,26 @@ export const classDeleteCheck = async (req, res, next) => {
                 res,
                 400,
                 "Cannot delete class with a teacher assigned"
+            );
+        }
+
+        const homeworks = await getHomeWorkByQueryService({ classId });
+
+        if (homeworks) {
+            return clientErrorResponse(
+                res,
+                400,
+                "Cannot delete class with assigned homeworks"
+            );
+        }
+
+        const grades = await getHomeWorkByQueryService({ classId });
+
+        if (grades) {
+            return clientErrorResponse(
+                res,
+                400,
+                "Cannot delete class with assigned grades"
             );
         }
 

@@ -3,10 +3,15 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleTableActions } from "../../store/slices/classes.slice";
 import CreateClassModal from "./CreateClassModal";
+import { useEffect } from "react";
+import { getMyChildren } from "../../store/slices/guardian.slice";
 
-export default function TableActions({ isAdmin }) {
-    const { search, level, mine } = useSelector(
+export default function TableActions({ isAdmin, isParent }) {
+    const { search, level, mine, studentId } = useSelector(
         (state) => state.classes.classesList.tableActions
+    );
+    const { data: myChildrenData } = useSelector(
+        (state) => state.guardians.myChildren
     );
     const dispatch = useDispatch();
 
@@ -28,6 +33,16 @@ export default function TableActions({ isAdmin }) {
     function handleChangeScope(value) {
         dispatch(handleTableActions({ key: "mine", value }));
     }
+
+    function handleChangeStudentFilter(value) {
+        dispatch(handleTableActions({ key: "studentId", value }));
+    }
+
+    useEffect(() => {
+        if (isParent) {
+            dispatch(getMyChildren());
+        }
+    }, [dispatch, isParent]);
 
     return (
         <>
@@ -51,7 +66,24 @@ export default function TableActions({ isAdmin }) {
                 </div>
 
                 <div className="flex gap-3">
-                    {!isAdmin && (
+                    {isParent && (
+                        <select
+                            value={studentId}
+                            onChange={(e) =>
+                                handleChangeStudentFilter(e.target.value)
+                            }
+                            className="rounded-full border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                        >
+                            <option value="">All Classes</option>
+                            {myChildrenData?.children?.map((child) => (
+                                <option key={child._id} value={child._id}>
+                                    {child.fullName}'s Classes
+                                </option>
+                            ))}
+                        </select>
+                    )}
+
+                    {!isAdmin && !isParent && (
                         <div className="flex items-center rounded-full border border-slate-200 bg-white p-0.5 text-xs">
                             <button
                                 onClick={() => handleChangeScope(false)}

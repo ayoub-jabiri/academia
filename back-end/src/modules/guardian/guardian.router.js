@@ -10,6 +10,7 @@ import {
     getGuardianParent,
     getGuardians,
     getGuardianStudent,
+    getMyChildren,
     getSingleGuardian,
     registerGuardian,
     updateGuardian,
@@ -27,6 +28,7 @@ const router = Router();
 router.use(authenticationCheck);
 
 router.get("/", authorizationCheck(["admin"]), getGuardians);
+
 router.post(
     "/",
     authorizationCheck(["admin"]),
@@ -37,6 +39,8 @@ router.post(
     guardianAlreadyExistsCheck,
     registerGuardian
 );
+
+router.get("/my-children", authorizationCheck(["parent"]), getMyChildren);
 
 router.get(
     "/:guardianId",

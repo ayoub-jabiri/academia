@@ -4,6 +4,7 @@ import {
     getGuardianParentService,
     getGuardiansService,
     getGuardianStudentService,
+    getMyChildrenService,
     registerGuardianService,
     updateGuardianService,
 } from "./guardian.service.js";
@@ -106,6 +107,18 @@ export const getGuardianParent = async (req, res) => {
         const parent = await getGuardianParentService(req.params.guardianId);
 
         res.json({ parent: excludeUserPassword(parent) });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const getMyChildren = async (req, res) => {
+    try {
+        const children = await getMyChildrenService(req.user.id);
+
+        res.json({
+            children: children,
+        });
     } catch (error) {
         serverErrorResponse(res, error);
     }
