@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios.instance";
+import {
+    getRoomsRequest,
+    createRoomRequest,
+    updateRoomRequest,
+    deleteRoomRequest,
+} from "../services/rooms.service";
 
 export const getRooms = createAsyncThunk(
     "rooms/getRooms",
     async (params = {}, { rejectWithValue }) => {
         try {
-            return await api.get("/school-rooms", { params });
+            return await getRoomsRequest(params);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -16,7 +21,7 @@ export const createRoom = createAsyncThunk(
     "rooms/createRoom",
     async (roomData, { rejectWithValue }) => {
         try {
-            const response = await api.post("/school-rooms", roomData);
+            const response = await createRoomRequest(roomData);
 
             return response;
         } catch (error) {
@@ -40,7 +45,7 @@ export const updateRoom = createAsyncThunk(
     "rooms/updateRoom",
     async ({ roomId, ...roomData }, { rejectWithValue }) => {
         try {
-            const response = await api.put(`/school-rooms/${roomId}`, roomData);
+            const response = await updateRoomRequest(roomId, roomData);
 
             return response;
         } catch (error) {
@@ -64,7 +69,7 @@ export const deleteRoom = createAsyncThunk(
     "rooms/deleteRoom",
     async (roomId, { rejectWithValue }) => {
         try {
-            const response = await api.delete(`/school-rooms/${roomId}`);
+            const response = await deleteRoomRequest(roomId);
 
             return { ...response, roomId };
         } catch (error) {

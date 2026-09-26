@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios.instance";
+import {
+    getAnnouncementsRequest,
+    getAnnouncementByIdRequest,
+    createAnnouncementRequest,
+    updateAnnouncementRequest,
+    deleteAnnouncementRequest,
+} from "../services/announcements.service";
 
 export const getAnnouncements = createAsyncThunk(
     "announcements/getAnnouncements",
     async (params = {}, { rejectWithValue }) => {
         try {
-            return await api.get("/announcements", { params });
+            return await getAnnouncementsRequest(params);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -16,7 +22,7 @@ export const getAnnouncementById = createAsyncThunk(
     "announcements/getAnnouncementById",
     async (announcementId, { rejectWithValue }) => {
         try {
-            return await api.get(`/announcements/${announcementId}`);
+            return await getAnnouncementByIdRequest(announcementId);
         } catch (error) {
             return rejectWithValue({
                 message: error.response?.data?.message || "An error occurred",
@@ -30,7 +36,7 @@ export const createAnnouncement = createAsyncThunk(
     "announcements/createAnnouncement",
     async (announcementData, { rejectWithValue }) => {
         try {
-            const response = await api.post("/announcements", announcementData);
+            const response = await createAnnouncementRequest(announcementData);
 
             return response;
         } catch (error) {
@@ -54,8 +60,8 @@ export const updateAnnouncement = createAsyncThunk(
     "announcements/updateAnnouncement",
     async ({ announcementId, ...announcementData }, { rejectWithValue }) => {
         try {
-            const response = await api.put(
-                `/announcements/${announcementId}`,
+            const response = await updateAnnouncementRequest(
+                announcementId,
                 announcementData
             );
 
@@ -81,9 +87,7 @@ export const deleteAnnouncement = createAsyncThunk(
     "announcements/deleteAnnouncement",
     async (announcementId, { rejectWithValue }) => {
         try {
-            const response = await api.delete(
-                `/announcements/${announcementId}`
-            );
+            const response = await deleteAnnouncementRequest(announcementId);
 
             return { ...response, announcementId };
         } catch (error) {

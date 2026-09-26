@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios.instance";
+import {
+    getGuardiansRequest,
+    registerGuardianRequest,
+    deleteGuardianRequest,
+    updateGuardianRequest,
+    getMyChildrenRequest,
+} from "../services/guardian.service";
 
 export const getGuardians = createAsyncThunk(
     "guardians/getGuardians",
     async (params = {}, { rejectWithValue }) => {
         try {
-            return await api.get("/guardians", { params });
+            return await getGuardiansRequest(params);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -16,7 +22,7 @@ export const registerGuardian = createAsyncThunk(
     "guardians/registerGuardian",
     async (guardianData, { rejectWithValue }) => {
         try {
-            const response = await api.post("/guardians", guardianData);
+            const response = await registerGuardianRequest(guardianData);
 
             return response;
         } catch (error) {
@@ -40,7 +46,7 @@ export const deleteGuardian = createAsyncThunk(
     "guardians/deleteGuardian",
     async (guardianId, { rejectWithValue }) => {
         try {
-            const response = await api.delete(`/guardians/${guardianId}`);
+            const response = await deleteGuardianRequest(guardianId);
 
             return { ...response, guardianId };
         } catch (error) {
@@ -56,8 +62,8 @@ export const updateGuardian = createAsyncThunk(
     "guardians/updateGuardian",
     async ({ guardianId, ...guardianData }, { rejectWithValue }) => {
         try {
-            const response = await api.put(
-                `/guardians/${guardianId}`,
+            const response = await updateGuardianRequest(
+                guardianId,
                 guardianData
             );
 
@@ -83,7 +89,7 @@ export const getMyChildren = createAsyncThunk(
     "guardians/getMyChildren",
     async (_, { rejectWithValue }) => {
         try {
-            return await api.get("/guardians/my-children");
+            return await getMyChildrenRequest();
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }

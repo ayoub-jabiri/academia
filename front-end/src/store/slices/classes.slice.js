@@ -1,11 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios.instance";
+import {
+    getClassesRequest,
+    createClassRequest,
+    updateClassRequest,
+    deleteClassRequest,
+    getClassByIdRequest,
+    assignTeacherToClassRequest,
+    unassignTeacherFromClassRequest,
+    registerStudentToClassRequest,
+    unregisterStudentFromClassRequest,
+} from "../services/classes.service";
 
 export const getClasses = createAsyncThunk(
     "classes/getClasses",
     async (params = {}, { rejectWithValue }) => {
         try {
-            return await api.get("/classes", { params });
+            return await getClassesRequest(params);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -16,7 +26,7 @@ export const createClass = createAsyncThunk(
     "classes/createClass",
     async (classData, { rejectWithValue }) => {
         try {
-            const response = await api.post("/classes", classData);
+            const response = await createClassRequest(classData);
 
             return response;
         } catch (error) {
@@ -40,7 +50,7 @@ export const updateClass = createAsyncThunk(
     "classes/updateClass",
     async ({ classId, ...classData }, { rejectWithValue }) => {
         try {
-            const response = await api.put(`/classes/${classId}`, classData);
+            const response = await updateClassRequest(classId, classData);
 
             return response;
         } catch (error) {
@@ -64,7 +74,7 @@ export const deleteClass = createAsyncThunk(
     "classes/deleteClass",
     async (classId, { rejectWithValue }) => {
         try {
-            const response = await api.delete(`/classes/${classId}`);
+            const response = await deleteClassRequest(classId);
 
             return { ...response, classId };
         } catch (error) {
@@ -80,7 +90,7 @@ export const getClassById = createAsyncThunk(
     "classes/getClassById",
     async (classId, { rejectWithValue }) => {
         try {
-            return await api.get(`/classes/${classId}`);
+            return await getClassByIdRequest(classId);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -91,9 +101,7 @@ export const assignTeacherToClass = createAsyncThunk(
     "classes/assignTeacherToClass",
     async ({ classId, teacherId }, { rejectWithValue }) => {
         try {
-            return await api.patch(`/classes/${classId}/assign-teacher`, {
-                teacherId,
-            });
+            return await assignTeacherToClassRequest(classId, teacherId);
         } catch (error) {
             return rejectWithValue({
                 message: error.response?.data?.message || "An error occurred",
@@ -107,7 +115,7 @@ export const unassignTeacherFromClass = createAsyncThunk(
     "classes/unassignTeacherFromClass",
     async (classId, { rejectWithValue }) => {
         try {
-            return await api.patch(`/classes/${classId}/unassign-teacher`);
+            return await unassignTeacherFromClassRequest(classId);
         } catch (error) {
             return rejectWithValue({
                 message: error.response?.data?.message || "An error occurred",
@@ -121,9 +129,7 @@ export const registerStudentToClass = createAsyncThunk(
     "classes/registerStudentToClass",
     async ({ classId, studentId }, { rejectWithValue }) => {
         try {
-            return await api.patch(`/classes/${classId}/register-student`, {
-                studentId,
-            });
+            return await registerStudentToClassRequest(classId, studentId);
         } catch (error) {
             return rejectWithValue({
                 message: error.response?.data?.message || "An error occurred",
@@ -137,9 +143,7 @@ export const unregisterStudentFromClass = createAsyncThunk(
     "classes/unregisterStudentFromClass",
     async ({ classId, studentId }, { rejectWithValue }) => {
         try {
-            return await api.patch(`/classes/${classId}/unregister-student`, {
-                studentId,
-            });
+            return await unregisterStudentFromClassRequest(classId, studentId);
         } catch (error) {
             return rejectWithValue({
                 message: error.response?.data?.message || "An error occurred",

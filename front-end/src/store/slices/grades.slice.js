@@ -1,11 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios.instance";
+import {
+    getGradesRequest,
+    getGradeByIdRequest,
+    getGradeClassStatsRequest,
+    createGradeRequest,
+    updateGradeRequest,
+    deleteGradeRequest,
+} from "../services/grades.service";
 
 export const getGrades = createAsyncThunk(
     "grades/getGrades",
     async (params = {}, { rejectWithValue }) => {
         try {
-            return await api.get("/grades", { params });
+            return await getGradesRequest(params);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -16,7 +23,7 @@ export const getGradeById = createAsyncThunk(
     "grades/getGradeById",
     async (gradeId, { rejectWithValue }) => {
         try {
-            return await api.get(`/grades/${gradeId}`);
+            return await getGradeByIdRequest(gradeId);
         } catch (error) {
             return rejectWithValue({
                 message: error.response?.data?.message || "An error occurred",
@@ -26,14 +33,11 @@ export const getGradeById = createAsyncThunk(
     }
 );
 
-// Fetches every grade for a class (optionally scoped to one evaluation
-// name) so the details page can compute class-level statistics without
-// disturbing the paginated gradesList used by GradesPage.
 export const getGradeClassStats = createAsyncThunk(
     "grades/getGradeClassStats",
     async (params = {}, { rejectWithValue }) => {
         try {
-            return await api.get("/grades", { params });
+            return await getGradeClassStatsRequest(params);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -44,7 +48,7 @@ export const createGrade = createAsyncThunk(
     "grades/createGrade",
     async (gradeData, { rejectWithValue }) => {
         try {
-            const response = await api.post("/grades", gradeData);
+            const response = await createGradeRequest(gradeData);
 
             return response;
         } catch (error) {
@@ -68,7 +72,7 @@ export const updateGrade = createAsyncThunk(
     "grades/updateGrade",
     async ({ gradeId, ...gradeData }, { rejectWithValue }) => {
         try {
-            const response = await api.put(`/grades/${gradeId}`, gradeData);
+            const response = await updateGradeRequest(gradeId, gradeData);
 
             return response;
         } catch (error) {
@@ -92,7 +96,7 @@ export const deleteGrade = createAsyncThunk(
     "grades/deleteGrade",
     async (gradeId, { rejectWithValue }) => {
         try {
-            const response = await api.delete(`/grades/${gradeId}`);
+            const response = await deleteGradeRequest(gradeId);
 
             return { ...response, gradeId };
         } catch (error) {

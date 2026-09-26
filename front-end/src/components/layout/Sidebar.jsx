@@ -179,8 +179,8 @@ export default function Sidebar({
 
                                 return (
                                     <Link
+                                        key={item.label}
                                         to={item.href}
-                                        href={item.href}
                                         className={`flex items-center gap-3 rounded-lg px-2 py-2 transition-colors ${
                                             isActive
                                                 ? "bg-purple-50 text-slate-900"

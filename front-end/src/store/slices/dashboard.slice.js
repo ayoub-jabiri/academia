@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios.instance";
+import {
+    getAdminDashboardRequest,
+    getTeacherDashboardRequest,
+    getStudentDashboardRequest,
+    getParentDashboardRequest,
+} from "../services/dashboard.service";
 
 export const getAdminDashboard = createAsyncThunk(
     "dashboard/getAdminDashboard",
     async (_, { rejectWithValue }) => {
         try {
-            return await api.get("/dashboard/admin/stats");
+            return await getAdminDashboardRequest();
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -16,7 +21,7 @@ export const getTeacherDashboard = createAsyncThunk(
     "dashboard/getTeacherDashboard",
     async (_, { rejectWithValue }) => {
         try {
-            return await api.get("/dashboard/teacher/stats");
+            return await getTeacherDashboardRequest();
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -27,7 +32,7 @@ export const getStudentDashboard = createAsyncThunk(
     "dashboard/getStudentDashboard",
     async (_, { rejectWithValue }) => {
         try {
-            return await api.get("/dashboard/student/stats");
+            return await getStudentDashboardRequest();
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -38,7 +43,7 @@ export const getParentDashboard = createAsyncThunk(
     "dashboard/getParentDashboard",
     async (_, { rejectWithValue }) => {
         try {
-            return await api.get("/dashboard/parent/stats");
+            return await getParentDashboardRequest();
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }

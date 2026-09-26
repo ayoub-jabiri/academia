@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios.instance";
+import {
+    getSubjectsRequest,
+    createSubjectRequest,
+    updateSubjectRequest,
+    deleteSubjectRequest,
+} from "../services/subjects.service";
 
 export const getSubjects = createAsyncThunk(
     "subjects/getSubjects",
     async (params = {}, { rejectWithValue }) => {
         try {
-            return await api.get("/subjects", { params });
+            return await getSubjectsRequest(params);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -16,7 +21,7 @@ export const createSubject = createAsyncThunk(
     "subjects/createSubject",
     async (subjectData, { rejectWithValue }) => {
         try {
-            const response = await api.post("/subjects", subjectData);
+            const response = await createSubjectRequest(subjectData);
 
             return response;
         } catch (error) {
@@ -40,10 +45,7 @@ export const updateSubject = createAsyncThunk(
     "subjects/updateSubject",
     async ({ subjectId, ...subjectData }, { rejectWithValue }) => {
         try {
-            const response = await api.put(
-                `/subjects/${subjectId}`,
-                subjectData
-            );
+            const response = await updateSubjectRequest(subjectId, subjectData);
 
             return response;
         } catch (error) {
@@ -67,7 +69,7 @@ export const deleteSubject = createAsyncThunk(
     "subjects/deleteSubject",
     async (subjectId, { rejectWithValue }) => {
         try {
-            const response = await api.delete(`/subjects/${subjectId}`);
+            const response = await deleteSubjectRequest(subjectId);
 
             return { ...response, subjectId };
         } catch (error) {

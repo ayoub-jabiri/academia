@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios.instance";
+import {
+    getHomeworksRequest,
+    getHomeworkByIdRequest,
+    createHomeworkRequest,
+    updateHomeworkRequest,
+    deleteHomeworkRequest,
+} from "../services/homework.service";
 
 export const getHomeworks = createAsyncThunk(
     "homework/getHomeworks",
     async (params = {}, { rejectWithValue }) => {
         try {
-            return await api.get("/homeworks", { params });
+            return await getHomeworksRequest(params);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -16,7 +22,7 @@ export const getHomeworkById = createAsyncThunk(
     "homework/getHomeworkById",
     async (homeworkId, { rejectWithValue }) => {
         try {
-            return await api.get(`/homeworks/${homeworkId}`);
+            return await getHomeworkByIdRequest(homeworkId);
         } catch (error) {
             return rejectWithValue({
                 message: error.response?.data?.message || "An error occurred",
@@ -30,7 +36,7 @@ export const createHomework = createAsyncThunk(
     "homework/createHomework",
     async (homeworkData, { rejectWithValue }) => {
         try {
-            const response = await api.post("/homeworks", homeworkData);
+            const response = await createHomeworkRequest(homeworkData);
 
             return response;
         } catch (error) {
@@ -54,8 +60,8 @@ export const updateHomework = createAsyncThunk(
     "homework/updateHomework",
     async ({ homeworkId, ...homeworkData }, { rejectWithValue }) => {
         try {
-            const response = await api.put(
-                `/homeworks/${homeworkId}`,
+            const response = await updateHomeworkRequest(
+                homeworkId,
                 homeworkData
             );
 
@@ -81,7 +87,7 @@ export const deleteHomework = createAsyncThunk(
     "homework/deleteHomework",
     async (homeworkId, { rejectWithValue }) => {
         try {
-            const response = await api.delete(`/homeworks/${homeworkId}`);
+            const response = await deleteHomeworkRequest(homeworkId);
 
             return { ...response, homeworkId };
         } catch (error) {

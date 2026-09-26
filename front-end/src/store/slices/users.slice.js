@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../api/axios.instance";
+import {
+    registerUserRequest,
+    getUsersRequest,
+    getUserByIdRequest,
+    updateUserRequest,
+} from "../services/users.service";
 
 export const registerUser = createAsyncThunk(
     "users/registerUser",
     async (userData, { rejectWithValue }) => {
         try {
-            const response = await api.post("/users/auth/register", userData);
+            const response = await registerUserRequest(userData);
 
             return response;
         } catch (error) {
@@ -29,9 +34,7 @@ export const getUsers = createAsyncThunk(
     "users/getUsers",
     async (params = {}, { rejectWithValue }) => {
         try {
-            return await api.get("/users", {
-                params,
-            });
+            return await getUsersRequest(params);
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }
@@ -42,7 +45,7 @@ export const getUserById = createAsyncThunk(
     "users/getUserById",
     async (userId, { rejectWithValue }) => {
         try {
-            return await api.get(`/users/${userId}`);
+            return await getUserByIdRequest(userId);
         } catch (error) {
             return rejectWithValue({
                 message: error.response?.data?.message || "An error occurred",
@@ -56,7 +59,7 @@ export const updateUser = createAsyncThunk(
     "users/updateUser",
     async ({ userId, ...userData }, { rejectWithValue }) => {
         try {
-            const response = await api.put(`/users/${userId}`, userData);
+            const response = await updateUserRequest(userId, userData);
 
             return response;
         } catch (error) {
