@@ -15,6 +15,7 @@ import guardianRouter from "./modules/guardian/guardian.router.js";
 import dashboardRouter from "./modules/dashboard/dashboard.router.js";
 import { clientErrorResponse } from "./utils/client.responses.js";
 import { authenticationCheck } from "./middlewares/global.middlewares.js";
+import setupSwagger from "./swagger.js";
 
 // Main Settings
 
@@ -24,6 +25,8 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 // App Settings
 
 const app = express();
+
+setupSwagger(app);
 
 app.use(cors());
 
