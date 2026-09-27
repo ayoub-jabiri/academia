@@ -217,7 +217,17 @@ http://localhost:3000/api
 
 ## Application Architecture
 
+### UML Class Diagram
+
 ![uml-class-diagram](docs/diagrams/uml-class-diagram.png)
+
+### UML Use Case Diagram
+
+![uml-use-case-diagram](docs/diagrams/uml-use-case-diagram.png)
+
+### UML Sequence Diagram
+
+![uml-sequence-diagram](docs/diagrams/uml-sequence-diagram.png)
 
 ---
 
