@@ -3,6 +3,8 @@ import app from "../../app.js";
 import { adminTestingToken, teacherTestingToken } from "../setup.js";
 import User from "../../modules/users/user.model.js";
 
+let loggedInUserToken;
+
 describe("user register", () => {
     describe("success test cases", () => {
         test("user registered successfully", async () => {
@@ -12,6 +14,7 @@ describe("user register", () => {
                     fullName: "John Doe 1",
                     phoneNumber: "0612345678",
                     email: "johndoe1@gmail.com",
+                    gender: "male",
                     role: "teacher",
                     password: "12345678",
                     passwordConfirm: "12345678",
@@ -28,6 +31,7 @@ describe("user register", () => {
             const user = await User.findOne({ email: "johndoe1@gmail.com" });
             expect(user).not.toBeNull();
             expect(user).toHaveProperty("fullName", "John Doe 1");
+            expect(user).toHaveProperty("gender", "male");
         });
     });
 
@@ -64,9 +68,45 @@ describe("user register", () => {
                     fullName: "",
                     phoneNumber: "",
                     email: "",
+                    gender: "",
                     role: "",
                     password: "",
                     passwordConfirm: "",
+                })
+                .set("Authorization", `Bearer ${adminTestingToken}`);
+
+            expect(res.statusCode).toEqual(400);
+            expect(res.body).toHaveProperty("message");
+        });
+
+        test("user registration fails due to missing gender", async () => {
+            const res = await request(app)
+                .post("/api/users/auth/register")
+                .send({
+                    fullName: "Gender Less",
+                    phoneNumber: "0612345679",
+                    email: "genderless@gmail.com",
+                    role: "teacher",
+                    password: "12345678",
+                    passwordConfirm: "12345678",
+                })
+                .set("Authorization", `Bearer ${adminTestingToken}`);
+
+            expect(res.statusCode).toEqual(400);
+            expect(res.body).toHaveProperty("message");
+        });
+
+        test("user registration fails due to invalid gender value", async () => {
+            const res = await request(app)
+                .post("/api/users/auth/register")
+                .send({
+                    fullName: "Invalid Gender",
+                    phoneNumber: "0612345679",
+                    email: "invalidgender@gmail.com",
+                    gender: "other",
+                    role: "teacher",
+                    password: "12345678",
+                    passwordConfirm: "12345678",
                 })
                 .set("Authorization", `Bearer ${adminTestingToken}`);
 
@@ -81,6 +121,7 @@ describe("user register", () => {
                     fullName: "John Doe 2",
                     phoneNumber: "0612345678",
                     email: "johndoe1@gmail.com",
+                    gender: "male",
                     role: "teacher",
                     password: "12345678",
                     passwordConfirm: "12345678",
@@ -104,6 +145,8 @@ describe("user login", () => {
             expect(res.statusCode).toEqual(200);
             expect(res.body).toHaveProperty("message");
             expect(res.body).toHaveProperty("accessToken");
+
+            loggedInUserToken = res.body.accessToken;
         });
     });
 
@@ -142,6 +185,30 @@ describe("user login", () => {
             });
 
             expect(res.statusCode).toEqual(400);
+            expect(res.body).toHaveProperty("message");
+        });
+    });
+});
+
+describe("user profile", () => {
+    describe("success test cases", () => {
+        test("get the logged-in user's profile successfully", async () => {
+            const res = await request(app)
+                .get("/api/users/auth/profile")
+                .set("Authorization", `Bearer ${loggedInUserToken}`);
+
+            expect(res.statusCode).toEqual(200);
+            expect(res.body).toHaveProperty("user");
+            expect(res.body.user).toHaveProperty("email", "johndoe1@gmail.com");
+            expect(res.body.user).not.toHaveProperty("password");
+        });
+    });
+
+    describe("failure test cases", () => {
+        test("get profile fails due to missing token", async () => {
+            const res = await request(app).get("/api/users/auth/profile");
+
+            expect(res.statusCode).toEqual(401);
             expect(res.body).toHaveProperty("message");
         });
     });

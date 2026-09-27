@@ -14,6 +14,7 @@ import homeworkRouter from "./modules/homework/homework.router.js";
 import guardianRouter from "./modules/guardian/guardian.router.js";
 import dashboardRouter from "./modules/dashboard/dashboard.router.js";
 import { clientErrorResponse } from "./utils/client.responses.js";
+import { authenticationCheck } from "./middlewares/global.middlewares.js";
 
 // Main Settings
 
@@ -38,7 +39,7 @@ app.use("/api/homeworks", homeworkRouter);
 app.use("/api/guardians", guardianRouter);
 app.use("/api/dashboard", dashboardRouter);
 
-app.use((req, res) => {
+app.use(authenticationCheck, (req, res) => {
     return clientErrorResponse(
         res,
         404,
