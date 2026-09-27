@@ -1,4 +1,4 @@
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil } from "lucide-react";
 import Avatar from "../global/Avatar";
 import NoDataAvailable from "../global/NoDataAvailable";
 import Modal from "../global/Modal";
@@ -152,10 +152,6 @@ export default function UsersTable() {
                                                 title="Update User"
                                             >
                                                 <Pencil className="h-3.5 w-3.5" />
-                                            </button>
-
-                                            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer">
-                                                <Trash2 className="h-3.5 w-3.5" />
                                             </button>
                                         </div>
                                     </td>
