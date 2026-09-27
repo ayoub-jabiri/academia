@@ -217,7 +217,7 @@ http://localhost:3000/api
 
 ## Application Architecture
 
-![Academia Application Architecture](docs/diagrams/architecture.svg)
+![uml-class-diagram](docs/diagrams/uml-class-diagram.png)
 
 ---
 
