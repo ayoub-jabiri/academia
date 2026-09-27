@@ -1,0 +1,58 @@
+name: CI & CD
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    backend:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: back-end
+
+        steps:
+            - name: Checkout the code
+              uses: actions/checkout@v4
+
+            - name: Setup node.js environment
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+                  cache: npm
+                  cache-dependency-path: back-end/package-lock.json
+
+            - name: Install the dependencies
+              run: npm i
+
+            - name: Run the tests
+              run: npm run test
+              env:
+                  PORT: ${{ secrets.PORT }}
+                  DB_URL: ${{ secrets.DB_URL }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+    frontend:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: front-end
+
+        steps:
+            - name: Checkout the code
+              uses: actions/checkout@v4
+
+            - name: Setup node.js environment
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+                  cache: npm
+                  cache-dependency-path: front-end/package-lock.json
+
+            - name: Install the dependencies
+              run: npm ci
+
+            - name: Build the project
+              run: npm run build
