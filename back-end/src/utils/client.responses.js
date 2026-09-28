@@ -5,7 +5,11 @@ export const clientErrorResponse = (res, statusCode, msg) => {
 };
 
 export const excludeUserPassword = (user) => {
-    const { password, ...userWithoutPassword } = user.toObject();
+    if (!user) {
+        return null;
+    }
+
+    const { password, ...userWithoutPassword } = user?.toObject();
 
     return userWithoutPassword;
 };

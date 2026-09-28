@@ -1,3 +1,4 @@
+import { hashPassword } from "../../utils/user.utils.js";
 import User from "./user.model.js";
 
 export const getUserByEmail = async (email) => await User.findOne({ email });
@@ -51,6 +52,12 @@ export const updateUserService = async (userId, userData) => {
     user.phoneNumber = userData.phoneNumber;
     user.email = userData.email;
     user.gender = userData.gender;
+
+    if (userData.password) {
+        const newHashedPassword = await hashPassword(userData.password);
+
+        user.password = newHashedPassword;
+    }
 
     return await user.save();
 };

@@ -122,7 +122,15 @@ export const userExistsByIdCheck = async (req, res, next) => {
 
 export const userUpdateDataValidationCheck = (req, res, next) => {
     try {
-        const { fullName, phoneNumber, email, gender, role } = req.body;
+        const {
+            fullName,
+            phoneNumber,
+            email,
+            gender,
+            role,
+            password,
+            passwordConfirm,
+        } = req.body;
 
         userUpdateSchema.parse({
             fullName,
@@ -130,6 +138,8 @@ export const userUpdateDataValidationCheck = (req, res, next) => {
             email,
             gender,
             role,
+            password: password || undefined,
+            passwordConfirm: passwordConfirm || undefined,
         });
 
         next();

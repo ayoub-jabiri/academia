@@ -11,6 +11,7 @@ import {
     clearUsersUpdateError,
 } from "../../store/slices/users.slice";
 import { setErrorAlert, setSuccessAlert } from "../../store/slices/alert.slice";
+import { Info } from "lucide-react";
 
 export default function UpdateUserForm({ onClose, userToUpdate, onUpdate }) {
     const dispatch = useDispatch();
@@ -23,6 +24,8 @@ export default function UpdateUserForm({ onClose, userToUpdate, onUpdate }) {
         email: userToUpdate?.email || "",
         phoneNumber: userToUpdate?.phoneNumber || "",
         gender: userToUpdate?.gender || "male",
+        password: "",
+        passwordConfirm: "",
     });
 
     useEffect(() => {
@@ -127,6 +130,54 @@ export default function UpdateUserForm({ onClose, userToUpdate, onUpdate }) {
                             <InputError message={inputErrors.gender} />
                         )}
                     </div>
+                </div>
+            </div>
+
+            <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                    Authentication Information
+                </p>
+
+                <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                        <label className="mb-1 block text-xs font-medium text-slate-500">
+                            Password
+                        </label>
+                        <input
+                            type="password"
+                            value={form.password}
+                            onChange={updateField("password")}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        />
+                        {inputErrors.password && (
+                            <InputError message={inputErrors.password} />
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="mb-1 block text-xs font-medium text-slate-500">
+                            Confirm Password
+                        </label>
+                        <input
+                            type="password"
+                            value={form.passwordConfirm}
+                            onChange={updateField("passwordConfirm")}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        />
+                        {inputErrors.passwordConfirm && (
+                            <InputError message={inputErrors.passwordConfirm} />
+                        )}
+                    </div>
+                </div>
+
+                <div className="mt-2 text-xs tracking-wide text-slate-400 flex  gap-1">
+                    <Info size={15} />
+                    <p>
+                        Fill the <span className="font-bold">password</span> and{" "}
+                        <span className="font-bold">confirm password</span>{" "}
+                        fields to reset the password; otherwise, keep them
+                        empty!
+                    </p>
                 </div>
             </div>
 
