@@ -1,6 +1,7 @@
 // External Modules
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 
 // Internal Modules
 import dns from "node:dns";
@@ -29,6 +30,8 @@ const app = express();
 setupSwagger(app);
 
 app.use(cors());
+
+app.use(helmet());
 
 app.use(express.json());
 
