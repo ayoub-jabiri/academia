@@ -15,6 +15,8 @@ export const teacherTestingToken = signToken({
 });
 
 beforeAll(async () => {
+    console.log("environment ", process.env?.ENV);
+
     mongoServer = await MongoMemoryServer.create();
     await mongoose.connect(mongoServer.getUri());
 });
