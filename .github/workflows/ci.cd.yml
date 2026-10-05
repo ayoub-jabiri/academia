@@ -33,6 +33,7 @@ jobs:
                   PORT: ${{ secrets.PORT }}
                   DB_URL: ${{ secrets.DB_URL }}
                   JWT_SECRET: ${{ secrets.JWT_SECRET }}
+                  ENV: ${{ secrets.ENV }}
 
     frontend:
         runs-on: ubuntu-latest
