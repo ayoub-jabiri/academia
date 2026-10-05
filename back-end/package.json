@@ -6,6 +6,7 @@
     "type": "module",
     "main": "src/server.js",
     "scripts": {
+        "start": "node --import dotenv/config src/server.js",
         "dev": "nodemon --import dotenv/config src/server.js",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --setupFiles dotenv/config",
         "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --setupFiles dotenv/config --watch"
