@@ -109,6 +109,12 @@ export const userUpdateSchema = z
                     ? "The user email is required"
                     : "The user email must be a valid email address",
         }),
+        dateOfBirth: z.string({
+            error: (iss) =>
+                iss.input == undefined
+                    ? "The user dateOfBirth is required"
+                    : "The user dateOfBirth must be a string",
+        }),
         gender: z.enum(["male", "female"], {
             error: (iss) =>
                 iss.input == undefined

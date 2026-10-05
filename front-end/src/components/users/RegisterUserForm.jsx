@@ -17,6 +17,7 @@ const initialFormState = {
     email: "",
     phoneNumber: "",
     gender: "male",
+    dateOfBirth: "",
     role: "student",
     password: "",
     passwordConfirm: "",
@@ -146,6 +147,21 @@ export default function RegisterUserForm({ onClose }) {
                         />
                         {inputErrors.phoneNumber && (
                             <InputError message={inputErrors.phoneNumber} />
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="mb-1 block text-xs font-medium text-slate-500">
+                            dateOfBirth
+                        </label>
+                        <input
+                            type="date"
+                            value={form.dateOfBirth}
+                            onChange={updateField("dateOfBirth")}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        />
+                        {inputErrors.dateOfBirth && (
+                            <InputError message={inputErrors.dateOfBirth} />
                         )}
                     </div>
 

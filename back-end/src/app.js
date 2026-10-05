@@ -34,19 +34,21 @@ app.use(cors());
 
 app.use(helmet());
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+if (process.env?.ENV !== "testing") {
+    const limiter = rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        limit: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
 
-    handler: (req, res) => {
-        res.status(429).json({
-            message:
-                "You have exceeded the rate limit. Please try again later.",
-        });
-    },
-});
+        handler: (req, res) => {
+            res.status(429).json({
+                message:
+                    "You have exceeded the rate limit. Please try again later.",
+            });
+        },
+    });
 
-app.use(limiter);
+    app.use(limiter);
+}
 
 app.use(express.json());
 

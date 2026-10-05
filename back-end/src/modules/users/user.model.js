@@ -28,6 +28,10 @@ const userSchema = new Schema({
         required: true,
         enum: ["admin", "teacher", "student", "parent"],
     },
+    dateOfBirth: {
+        type: Date,
+        required: true,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
