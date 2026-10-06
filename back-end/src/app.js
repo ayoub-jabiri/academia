@@ -18,6 +18,8 @@ import dashboardRouter from "./modules/dashboard/dashboard.router.js";
 import { clientErrorResponse } from "./utils/client.responses.js";
 import { authenticationCheck } from "./middlewares/global.middlewares.js";
 import setupSwagger from "./swagger.js";
+import { connectDb } from "./config/db.js";
+import { serverErrorResponse } from "./utils/server.error.js";
 
 // Main Settings
 
@@ -32,6 +34,15 @@ const app = express();
 
 if (process.env?.ENV === "production") {
     app.set("trust proxy", 1);
+
+    app.use(async (req, res, next) => {
+        try {
+            await connectDb();
+            next();
+        } catch (error) {
+            serverErrorResponse(res, error);
+        }
+    });
 }
 
 setupSwagger(app);
