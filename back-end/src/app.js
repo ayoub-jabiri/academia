@@ -21,12 +21,18 @@ import setupSwagger from "./swagger.js";
 
 // Main Settings
 
-dns.setDefaultResultOrder("ipv4first");
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
+if (process.env?.ENV == "development" || process.env?.ENV == "testing") {
+    dns.setDefaultResultOrder("ipv4first");
+    dns.setServers(["8.8.8.8", "8.8.4.4"]);
+}
 
 // App Settings
 
 const app = express();
+
+if (process.env?.ENV === "production") {
+    app.set("trust proxy", 1);
+}
 
 setupSwagger(app);
 

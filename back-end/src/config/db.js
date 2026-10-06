@@ -8,7 +8,14 @@ if (!DB_URL) {
     );
 }
 
-let cached = global.mongoose || { conn: null, promise: null };
+let cached = global.mongoose;
+
+if (!cached) {
+    cached = global.mongoose = {
+        conn: null,
+        promise: null,
+    };
+}
 
 export const connectDb = async () => {
     if (cached.conn) {
@@ -16,19 +23,12 @@ export const connectDb = async () => {
     }
 
     if (!cached.promise) {
-        const opts = {
-            bufferCommands: false,
-            serverSelectionTimeoutMS: 5000,
-        };
-
-        cached.promise = mongoose.connect(DB_URL, opts).then((mongoose) => {
-            console.log("Database connected successfully!");
-            return mongoose;
-        });
+        cached.promise = mongoose.connect(process.env.DB_URL);
     }
 
     try {
         cached.conn = await cached.promise;
+        console.log("Database connected successfully!");
     } catch (error) {
         cached.promise = null;
         console.error("Error connecting to MongoDB:", error);

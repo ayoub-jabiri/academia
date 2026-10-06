@@ -1,7 +1,7 @@
 import app from "./app.js";
 import { connectDb } from "./config/db.js";
 
-connectDb();
+await connectDb();
 
 const PORT = process.env.PORT;
 
